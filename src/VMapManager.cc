@@ -17,6 +17,8 @@ void VMapManager::init_service() {
   RCLCPP_INFO(kDefaultLogger, "VMapManager object configure.");
   initial_pose_publisher_ = node_->create_publisher<PoseWithCovarianceStamped>(
       kDefaultTopicInitialPose, 10);
+  map_metadata_publisher_ =
+      node_->create_publisher<MapMetaData>(kCurrentMapTopic, 10);
 
   srv_start_mapping_client_ = std::make_shared<ServiceClient<Trigger>>(
       kDefaultServiceStartMapping, node_);
@@ -174,6 +176,15 @@ cv::Mat VMapManager::get_current_map() {
       cairo_image_surface_get_height(painted_slices.surface.get());
   const uint32_t *pixel_data = reinterpret_cast<uint32_t *>(
       cairo_image_surface_get_data(painted_slices.surface.get()));
+
+  map_metadata_.resolution        = resolution_;
+  map_metadata_.width             = width;
+  map_metadata_.height            = height;
+  map_metadata_.origin.position.x = -painted_slices.origin.x() * resolution_;
+  map_metadata_.origin.position.y =
+      (-height + painted_slices.origin.y()) * resolution_;
+  map_metadata_publisher_->publish(map_metadata_);
+
   cv::Mat image(height, width, CV_8UC1);
   for (int y = height - 1; y >= 0; --y) {
     for (int x = 0; x < width; ++x) {

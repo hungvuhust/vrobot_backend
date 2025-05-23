@@ -8,6 +8,7 @@
 #include <memory>
 
 #include <geometry_msgs/msg/pose_stamped.hpp>
+#include <nav_msgs/msg/map_meta_data.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/timer.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
@@ -22,10 +23,12 @@
 constexpr char kScanMatcherTopic[]     = "/scan_matched_points2";
 constexpr char kTrackedPoseTopic[]     = "/tracked_pose";
 constexpr char kMapManagerStateTopic[] = "/map_manager/state";
+constexpr char kCurrentMapTopic[]      = "/map/current_map/info";
 
 const rclcpp::Logger kLogger = rclcpp::get_logger("robot_info");
 
 using geometry_msgs::msg::PoseStamped;
+using nav_msgs::msg::MapMetaData;
 using sensor_msgs::msg::PointCloud2;
 using vrobot_map_manager::msg::MapManagerState;
 
@@ -51,6 +54,7 @@ private:
   void tracked_pose_callback(const PoseStamped::SharedPtr msg);
   void map_manager_state_callback(const MapManagerState::SharedPtr msg);
   void timer_callback();
+  void current_map_callback(const MapMetaData::SharedPtr msg);
 
 private:
   rclcpp::Node::SharedPtr                      node_;
@@ -58,7 +62,8 @@ private:
   rclcpp::Subscription<PointCloud2>::SharedPtr scan_subscriber_;
   rclcpp::Subscription<PoseStamped>::SharedPtr tracked_pose_subscriber_;
   rclcpp::Subscription<MapManagerState>::SharedPtr
-      map_manager_state_subscriber_;
+                                               map_manager_state_subscriber_;
+  rclcpp::Subscription<MapMetaData>::SharedPtr current_map_subscriber_;
 
   std::shared_ptr<tf2_ros::Buffer>            tf_buffer_;
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_;

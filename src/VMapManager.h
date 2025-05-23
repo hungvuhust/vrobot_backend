@@ -22,15 +22,19 @@
 #include <memory>
 #include <mutex>
 #include <nav2_util/service_client.hpp>
+#include <nav_msgs/msg/detail/map_meta_data__struct.hpp>
+#include <nav_msgs/msg/map_meta_data.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <rclcpp/logger.hpp>
+#include <rclcpp/publisher.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/subscription.hpp>
 #include <std_srvs/srv/trigger.hpp>
 #include <string>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <vector>
+#include <vrobot_map_manager/msg/detail/map_manager_state__struct.hpp>
 #include <vrobot_map_manager/msg/map_manager_state.hpp>
 #include <vrobot_map_manager/srv/load_map.hpp>
 #include <vrobot_map_manager/srv/patch_map.hpp>
@@ -47,6 +51,7 @@ constexpr char kDefaultServiceSaveMap[]           = "/save_map";
 constexpr char kSubmapListTopic[]                 = "/submap_list";
 constexpr char kSubmapQueryServiceName[]          = "/submap_query";
 constexpr char kMapManagerStateTopic[]            = "/map_manager/state";
+constexpr char kCurrentMapTopic[]                 = "/map/current_map/info";
 
 const rclcpp::Logger kDefaultLogger =
     rclcpp::get_logger("vrobot_cartographer_cli");
@@ -59,6 +64,7 @@ using cartographer_ros_msgs::msg::SubmapList;
 using cartographer_ros_msgs::srv::SubmapQuery;
 using geometry_msgs::msg::PoseWithCovarianceStamped;
 using nav2_util::ServiceClient;
+using nav_msgs::msg::MapMetaData;
 using std_srvs::srv::Trigger;
 using vrobot_map_manager::msg::MapManagerState;
 using vrobot_map_manager::srv::LoadMap;
@@ -94,7 +100,8 @@ private:
   rclcpp::Node::SharedPtr node_;
 
   rclcpp::Publisher<PoseWithCovarianceStamped>::SharedPtr
-      initial_pose_publisher_{nullptr};
+                                            initial_pose_publisher_{nullptr};
+  rclcpp::Publisher<MapMetaData>::SharedPtr map_metadata_publisher_{nullptr};
 
   std::shared_ptr<ServiceClient<Trigger>> srv_start_mapping_client_{nullptr};
   std::shared_ptr<ServiceClient<Trigger>> srv_switch_idle_client_{nullptr};
@@ -117,6 +124,7 @@ private:
   std::string                                 last_frame_id_;
   cv::Mat                                     current_map_;
   MapManagerState                             map_manager_state_;
+  MapMetaData                                 map_metadata_;
   double                                      resolution_ = 0.05;
 };
 

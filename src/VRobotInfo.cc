@@ -25,6 +25,10 @@ void VRobotInfo::Initialize() {
       kMapManagerStateTopic, rclcpp::SensorDataQoS(),
       std::bind(&VRobotInfo::map_manager_state_callback, this,
                 std::placeholders::_1));
+  current_map_subscriber_ = node_->create_subscription<MapMetaData>(
+      kCurrentMapTopic, rclcpp::SensorDataQoS(),
+      std::bind(&VRobotInfo::current_map_callback, this,
+                std::placeholders::_1));
 
   timer_ = node_->create_wall_timer(
       1s, std::bind(&VRobotInfo::timer_callback, this));
@@ -96,6 +100,13 @@ void VRobotInfo::map_manager_state_callback(
     map_manager_state_ = "patch_mapping";
     break;
   }
+}
+
+void VRobotInfo::current_map_callback(const MapMetaData::SharedPtr msg) {
+  if (node_->count_publishers(kCurrentMapTopic) == 0) {
+    return;
+  }
+  std::lock_guard<std::mutex> lock(mutex_map_manager_state_);
 }
 
 Json::Value VRobotInfo::get_robot_pose_json() {
