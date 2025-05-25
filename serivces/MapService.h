@@ -5,7 +5,8 @@
 #include <models/Map.h>
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
+using namespace drogon_model::amr_01::amr_ros2;
+
 
 class MapService : public drogon::HttpController<MapService> {
 public:

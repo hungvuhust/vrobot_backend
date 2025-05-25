@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
   // --- 4. Khởi động WebSocket Server của Drogon ---
   drogon::app().loadConfigFile(
-      "/home/rtc/Documents/code/vrobot_backend/config.json");
+      "/home/boot/ros2_ws/src/vrobot_backend/config.json");
   drogon::app().run(); // Blocking call
 
   // --- 5. Dọn dẹp ---

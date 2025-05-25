@@ -11,7 +11,7 @@
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
+using namespace drogon_model::amr_01::amr_ros2;
 
 const std::string Map::Cols::_id_map = "\"id_map\"";
 const std::string Map::Cols::_map_name = "\"map_name\"";
@@ -21,7 +21,7 @@ const std::string Map::Cols::_theta = "\"theta\"";
 const std::string Map::Cols::_image = "\"image\"";
 const std::string Map::primaryKeyName = "id_map";
 const bool Map::hasPrimaryKey = true;
-const std::string Map::tableName = "\"map\"";
+const std::string Map::tableName = "amr_ros2.\"map\"";
 
 const std::vector<typename Map::MetaData> Map::metaData_={
 {"id_map","int32_t","integer",4,1,1,1},

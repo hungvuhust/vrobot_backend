@@ -36,7 +36,9 @@ using DbClientPtr = std::shared_ptr<DbClient>;
 }
 namespace drogon_model
 {
-namespace vrobot
+namespace amr_01
+{
+namespace amr_ros2
 {
 
 class Curvelink
@@ -327,5 +329,6 @@ class Curvelink
         return sql;
     }
 };
-} // namespace vrobot
+} // namespace amr_ros2
+} // namespace amr_01
 } // namespace drogon_model

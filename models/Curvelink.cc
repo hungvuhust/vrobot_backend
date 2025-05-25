@@ -11,7 +11,7 @@
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
+using namespace drogon_model::amr_01::amr_ros2;
 
 const std::string Curvelink::Cols::_id_curve_link = "\"id_curve_link\"";
 const std::string Curvelink::Cols::_id_start = "\"id_start\"";
@@ -23,7 +23,7 @@ const std::string Curvelink::Cols::_control_point_2_y = "\"control_point_2_y\"";
 const std::string Curvelink::Cols::_map_id = "\"map_id\"";
 const std::string Curvelink::primaryKeyName = "id_curve_link";
 const bool Curvelink::hasPrimaryKey = true;
-const std::string Curvelink::tableName = "\"curvelink\"";
+const std::string Curvelink::tableName = "amr_ros2.\"curvelink\"";
 
 const std::vector<typename Curvelink::MetaData> Curvelink::metaData_={
 {"id_curve_link","int32_t","integer",4,1,1,1},

@@ -48,6 +48,7 @@ public:
   Json::Value get_scan_json();
   Json::Value get_robot_pose_json();
   std::string get_map_manager_state();
+  Json::Value get_current_map_metadata();
 
 private:
   void scan_callback(const PointCloud2::SharedPtr msg);
@@ -78,6 +79,7 @@ private:
   Json::Value scan_json_;
   Json::Value robot_pose_json_;
   std::string map_manager_state_;
+  MapMetaData current_map_metadata_;
 };
 
 } // namespace vrobot_backend

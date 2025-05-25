@@ -107,6 +107,7 @@ void VRobotInfo::current_map_callback(const MapMetaData::SharedPtr msg) {
     return;
   }
   std::lock_guard<std::mutex> lock(mutex_map_manager_state_);
+  current_map_metadata_ = *msg;
 }
 
 Json::Value VRobotInfo::get_robot_pose_json() {
@@ -123,11 +124,13 @@ void VRobotInfo::timer_callback() {
   auto robot_pose_json   = get_robot_pose_json();
   auto scan_json         = get_scan_json();
   auto map_manager_state = get_map_manager_state();
+  auto current_map_metadata = get_current_map_metadata();
 
   Json::Value ret(Json::objectValue);
   ret["location"] = robot_pose_json;
   ret["laser"]    = scan_json;
   ret["mode"]     = map_manager_state;
+  ret["map"] = current_map_metadata;
 
   std::string message = ret.toStyledString();
   timer_callback_(message);
@@ -136,6 +139,23 @@ void VRobotInfo::timer_callback() {
 std::string VRobotInfo::get_map_manager_state() {
   std::lock_guard<std::mutex> lock(mutex_map_manager_state_);
   return map_manager_state_;
+}
+
+Json::Value VRobotInfo::get_current_map_metadata(){
+  std::lock_guard<std::mutex> lock(mutex_map_manager_state_);
+  Json::Value metadata(Json::objectValue);
+  metadata["resolution"] = current_map_metadata_.resolution;
+  metadata["width"] = current_map_metadata_.width;
+  metadata["height"] = current_map_metadata_.height;
+  metadata["origin"]["position"]["x"] = current_map_metadata_.origin.position.x;
+  metadata["origin"]["position"]["y"] = current_map_metadata_.origin.position.y;
+  metadata["origin"]["position"]["z"] = current_map_metadata_.origin.position.z;
+  metadata["origin"]["orientation"]["w"] = current_map_metadata_.origin.orientation.w;
+  metadata["origin"]["orientation"]["x"] = current_map_metadata_.origin.orientation.x;
+  metadata["origin"]["orientation"]["y"] = current_map_metadata_.origin.orientation.y;
+  metadata["origin"]["orientation"]["z"] = current_map_metadata_.origin.orientation.z;
+
+  return metadata;
 }
 
 } // namespace vrobot_backend

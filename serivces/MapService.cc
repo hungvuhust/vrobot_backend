@@ -1,11 +1,9 @@
 #include "serivces/MapService.h"
 #include <drogon/drogon.h>
 #include <models/Map.h>
-using namespace drogon_model::vrobot;
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
 
 void MapService::getAll(
     const HttpRequestPtr                          &req,

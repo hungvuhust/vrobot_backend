@@ -11,7 +11,7 @@
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
+using namespace drogon_model::amr_01::amr_ros2;
 
 const std::string Node::Cols::_id = "\"id\"";
 const std::string Node::Cols::_x = "\"x\"";
@@ -21,7 +21,7 @@ const std::string Node::Cols::_type = "\"type\"";
 const std::string Node::Cols::_map_id = "\"map_id\"";
 const std::string Node::primaryKeyName = "id";
 const bool Node::hasPrimaryKey = true;
-const std::string Node::tableName = "\"node\"";
+const std::string Node::tableName = "amr_ros2.\"node\"";
 
 const std::vector<typename Node::MetaData> Node::metaData_={
 {"id","int32_t","integer",4,1,1,1},

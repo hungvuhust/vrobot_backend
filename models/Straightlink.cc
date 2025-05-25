@@ -11,7 +11,7 @@
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
+using namespace drogon_model::amr_01::amr_ros2;
 
 const std::string Straightlink::Cols::_id_straight_link = "\"id_straight_link\"";
 const std::string Straightlink::Cols::_id_start = "\"id_start\"";
@@ -19,7 +19,7 @@ const std::string Straightlink::Cols::_id_stop = "\"id_stop\"";
 const std::string Straightlink::Cols::_map_id = "\"map_id\"";
 const std::string Straightlink::primaryKeyName = "id_straight_link";
 const bool Straightlink::hasPrimaryKey = true;
-const std::string Straightlink::tableName = "\"straightlink\"";
+const std::string Straightlink::tableName = "amr_ros2.\"straightlink\"";
 
 const std::vector<typename Straightlink::MetaData> Straightlink::metaData_={
 {"id_straight_link","int32_t","integer",4,1,1,1},
