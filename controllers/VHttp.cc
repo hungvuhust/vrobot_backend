@@ -34,7 +34,8 @@ void VHttp::mapping(const HttpRequestPtr                          &req,
 void VHttp::save_map(const HttpRequestPtr                          &req,
                      std::function<void(const HttpResponsePtr &)> &&callback,
                      std::string                                  &&map_name) {
-  auto result = carto_cli_->save_map(map_name);
+  std::string map_dir = maps_dir_ + map_name + ".pbstream";
+  auto result = carto_cli_->save_map(map_dir);
   auto resp   = HttpResponse::newHttpResponse();
   if (result) {
     resp->setStatusCode(k200OK);
@@ -49,7 +50,8 @@ void VHttp::save_map(const HttpRequestPtr                          &req,
 void VHttp::open_map(const HttpRequestPtr                          &req,
                      std::function<void(const HttpResponsePtr &)> &&callback,
                      std::string                                  &&map_name) {
-  auto result = carto_cli_->switch_localization(map_name);
+  std::string map_dir = maps_dir_ + map_name + ".pbstream";
+  auto result = carto_cli_->switch_localization(map_dir);
   auto resp   = HttpResponse::newHttpResponse();
   if (result) {
     resp->setStatusCode(k200OK);

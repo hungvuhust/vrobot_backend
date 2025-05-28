@@ -45,4 +45,5 @@ public:
 
 private:
   static std::shared_ptr<VMapManager> carto_cli_;
+  std::string maps_dir_{"/home/boot/ros2_ws/map/"}
 };
