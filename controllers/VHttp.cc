@@ -47,6 +47,7 @@ void VHttp::save_map(const HttpRequestPtr                          &req,
   callback(resp);
 }
 
+
 void VHttp::open_map(const HttpRequestPtr                          &req,
                      std::function<void(const HttpResponsePtr &)> &&callback,
                      std::string                                  &&map_name) {

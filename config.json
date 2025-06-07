@@ -46,5 +46,10 @@
         "gzip_static": true,
         "br_static": true,
         "client_max_body_size": "2M"
+    },
+    "accessControlAllow": {
+        "origin": "*",
+        "methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "headers": "Content-Type, Authorization"
     }
 }

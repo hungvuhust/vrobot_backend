@@ -5,6 +5,9 @@ CREATE SCHEMA IF NOT EXISTS public;
 CREATE TABLE IF NOT EXISTS public.Map (
     id_map SERIAL PRIMARY KEY,
     map_name TEXT UNIQUE NOT NULL,
+    width INTEGER NOT NULL,
+    height INTEGER NOT NULL,
+    resolution REAL NOT NULL,
     x REAL NOT NULL,
     y REAL NOT NULL,
     theta REAL NOT NULL,
@@ -18,27 +21,34 @@ CREATE TABLE IF NOT EXISTS public.Node (
     y REAL NOT NULL,
     theta REAL NOT NULL,
     type TEXT NOT NULL,
-    map_id INTEGER NOT NULL REFERENCES public.Map(id_map)
+    map_id INTEGER NOT NULL,
+    FOREIGN KEY (map_id) REFERENCES public.Map(id_map) ON DELETE CASCADE
 );
 
 -- Bảng đường thẳng
 CREATE TABLE IF NOT EXISTS public.StraightLink (
     id_straight_link SERIAL PRIMARY KEY,
-    id_start INTEGER NOT NULL REFERENCES public.Node(id),
-    id_stop INTEGER NOT NULL REFERENCES public.Node(id),
-    map_id INTEGER NOT NULL REFERENCES public.Map(id_map)
+    id_start INTEGER NOT NULL,
+    id_stop INTEGER NOT NULL,
+    map_id INTEGER NOT NULL,
+    FOREIGN KEY (id_start) REFERENCES public.Node(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_stop)  REFERENCES public.Node(id) ON DELETE CASCADE,
+    FOREIGN KEY (map_id)   REFERENCES public.Map(id_map) ON DELETE CASCADE
 );
 
 -- Bảng đường cong
 CREATE TABLE IF NOT EXISTS public.CurveLink (
     id_curve_link SERIAL PRIMARY KEY,
-    id_start INTEGER NOT NULL REFERENCES public.Node(id),
-    id_stop INTEGER NOT NULL REFERENCES public.Node(id),
+    id_start INTEGER NOT NULL,
+    id_stop INTEGER NOT NULL,
     control_point_1_x REAL NOT NULL,
     control_point_1_y REAL NOT NULL,
     control_point_2_x REAL NOT NULL,
     control_point_2_y REAL NOT NULL,
-    map_id INTEGER NOT NULL REFERENCES public.Map(id_map)
+    map_id INTEGER NOT NULL,
+    FOREIGN KEY (id_start) REFERENCES public.Node(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_stop)  REFERENCES public.Node(id) ON DELETE CASCADE,
+    FOREIGN KEY (map_id)   REFERENCES public.Map(id_map) ON DELETE CASCADE
 );
 
 -- Cấp quyền cho PostgREST role

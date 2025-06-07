@@ -31,35 +31,37 @@ void VRobotInfo::Initialize() {
                 std::placeholders::_1));
 
   timer_ = node_->create_wall_timer(
-      1s, std::bind(&VRobotInfo::timer_callback, this));
+      0.5s, std::bind(&VRobotInfo::timer_callback, this));
 
   tf_buffer_   = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 }
 
-void VRobotInfo::scan_callback(const PointCloud2::SharedPtr msg) {
-  if (node_->count_publishers(kScanMatcherTopic) == 0) {
-    return;
-  }
-  std::string x_data = "";
-  std::string y_data = "";
 
+
+void VRobotInfo::scan_callback(const PointCloud2::SharedPtr msg) {
+  if (node_->count_publishers(kScanMatcherTopic) == 0) return;
+
+  std::string x_data, y_data;
   std::stringstream ss;
 
-  for (size_t i = 0; i < msg->data.size(); i += msg->point_step * 3) {
+  for (size_t i = 0; i < msg->width; i++) {
     float x, y;
-    memcpy(&x, &msg->data[i + msg->fields[0].offset], sizeof(float));
-    memcpy(&y, &msg->data[i + msg->fields[1].offset], sizeof(float));
-    ss.str("");
-    ss << std::fixed << std::setprecision(2) << x;
+
+    size_t point_offset = i * msg->point_step;
+    memcpy(&x, &msg->data[point_offset + msg->fields[0].offset], sizeof(float));
+    memcpy(&y, &msg->data[point_offset + msg->fields[1].offset], sizeof(float));
+
+    ss.str(""); ss << std::fixed << std::setprecision(2) << x;
     x_data += ss.str() + " ";
-    ss.str("");
-    ss << std::fixed << std::setprecision(2) << y;
+
+    ss.str(""); ss << std::fixed << std::setprecision(2) << y;
     y_data += ss.str() + " ";
   }
 
-  x_data.pop_back();
-  y_data.pop_back();
+  // Xoá dấu cách cuối cùng
+  if (!x_data.empty()) x_data.pop_back();
+  if (!y_data.empty()) y_data.pop_back();
 
   {
     std::lock_guard<std::mutex> lock(mutex_scan_);
@@ -67,6 +69,38 @@ void VRobotInfo::scan_callback(const PointCloud2::SharedPtr msg) {
     scan_json_["y"] = y_data;
   }
 }
+
+
+// void VRobotInfo::scan_callback(const PointCloud2::SharedPtr msg) {
+//   if (node_->count_publishers(kScanMatcherTopic) == 0) {
+//     return;
+//   }
+//   std::string x_data = "";
+//   std::string y_data = "";
+
+//   std::stringstream ss;
+
+//   for (size_t i = 0; i < msg->data.size(); i += msg->point_step * 3) {
+//     float x, y;
+//     memcpy(&x, &msg->data[i + msg->fields[0].offset], sizeof(float));
+//     memcpy(&y, &msg->data[i + msg->fields[1].offset], sizeof(float));
+//     ss.str("");
+//     ss << std::fixed << std::setprecision(2) << x;
+//     x_data += ss.str() + " ";
+//     ss.str("");
+//     ss << std::fixed << std::setprecision(2) << y;
+//     y_data += ss.str() + " ";
+//   }
+
+//   x_data.pop_back();
+//   y_data.pop_back();
+
+//   {
+//     std::lock_guard<std::mutex> lock(mutex_scan_);
+//     scan_json_["x"] = x_data;
+//     scan_json_["y"] = y_data;
+//   }
+// }
 
 void VRobotInfo::tracked_pose_callback(const PoseStamped::SharedPtr msg) {
   if (node_->count_publishers(kTrackedPoseTopic) == 0) {

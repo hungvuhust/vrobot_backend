@@ -3,6 +3,7 @@
 #include <drogon/HttpController.h>
 #include <drogon/orm/Mapper.h>
 #include <models/Map.h>
+
 using namespace drogon;
 using namespace drogon::orm;
 using namespace drogon_model::amr_01::amr_ros2;
@@ -16,7 +17,7 @@ public:
   // GET    /maps/{1}
   ADD_METHOD_TO(MapService::getById, "/maps/{1}", Get);
   // POST   /maps
-  ADD_METHOD_TO(MapService::create, "/maps", Post);
+  ADD_METHOD_TO(MapService::create, "/maps",Post);
   // PUT    /maps/{1}
   ADD_METHOD_TO(MapService::update, "/maps/{1}", Put);
   // DELETE /maps/{1}
@@ -27,10 +28,13 @@ public:
               std::function<void(const HttpResponsePtr &)> &&callback);
   void getById(const HttpRequestPtr                          &req,
                std::function<void(const HttpResponsePtr &)> &&callback, int id);
+
   void create(const HttpRequestPtr                          &req,
               std::function<void(const HttpResponsePtr &)> &&callback);
+
   void update(const HttpRequestPtr                          &req,
               std::function<void(const HttpResponsePtr &)> &&callback, int id);
+
   void erase(const HttpRequestPtr                          &req,
              std::function<void(const HttpResponsePtr &)> &&callback, int id);
 
