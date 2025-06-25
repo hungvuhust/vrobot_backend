@@ -8,8 +8,8 @@ using namespace drogon;
 using namespace drogon::orm;
 using namespace drogon_model::amr_01::amr_ros2;
 
-
-class MapService : public drogon::HttpController<MapService> {
+class MapService : public drogon::HttpController<MapService>
+{
 public:
   METHOD_LIST_BEGIN
   // GET    /maps
@@ -17,25 +17,25 @@ public:
   // GET    /maps/{1}
   ADD_METHOD_TO(MapService::getById, "/maps/{1}", Get);
   // POST   /maps
-  ADD_METHOD_TO(MapService::create, "/maps",Post);
+  ADD_METHOD_TO(MapService::create, "/maps", Post);
   // PUT    /maps/{1}
   ADD_METHOD_TO(MapService::update, "/maps/{1}", Put);
   // DELETE /maps/{1}
   ADD_METHOD_TO(MapService::erase, "/maps/{1}", Delete);
   METHOD_LIST_END
 
-  void getAll(const HttpRequestPtr                          &req,
+  void getAll(const HttpRequestPtr &req,
               std::function<void(const HttpResponsePtr &)> &&callback);
-  void getById(const HttpRequestPtr                          &req,
+  void getById(const HttpRequestPtr &req,
                std::function<void(const HttpResponsePtr &)> &&callback, int id);
 
-  void create(const HttpRequestPtr                          &req,
+  void create(const HttpRequestPtr &req,
               std::function<void(const HttpResponsePtr &)> &&callback);
 
-  void update(const HttpRequestPtr                          &req,
+  void update(const HttpRequestPtr &req,
               std::function<void(const HttpResponsePtr &)> &&callback, int id);
 
-  void erase(const HttpRequestPtr                          &req,
+  void erase(const HttpRequestPtr &req,
              std::function<void(const HttpResponsePtr &)> &&callback, int id);
 
 private:

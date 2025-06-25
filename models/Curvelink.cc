@@ -15,7 +15,7 @@ using namespace drogon_model::amr_01::amr_ros2;
 
 const std::string Curvelink::Cols::_id_curve_link = "\"id_curve_link\"";
 const std::string Curvelink::Cols::_id_start = "\"id_start\"";
-const std::string Curvelink::Cols::_id_stop = "\"id_stop\"";
+const std::string Curvelink::Cols::_id_end = "\"id_end\"";
 const std::string Curvelink::Cols::_control_point_1_x = "\"control_point_1_x\"";
 const std::string Curvelink::Cols::_control_point_1_y = "\"control_point_1_y\"";
 const std::string Curvelink::Cols::_control_point_2_x = "\"control_point_2_x\"";
@@ -28,7 +28,7 @@ const std::string Curvelink::tableName = "amr_ros2.\"curvelink\"";
 const std::vector<typename Curvelink::MetaData> Curvelink::metaData_={
 {"id_curve_link","int32_t","integer",4,1,1,1},
 {"id_start","int32_t","integer",4,0,0,1},
-{"id_stop","int32_t","integer",4,0,0,1},
+{"id_end","int32_t","integer",4,0,0,1},
 {"control_point_1_x","float","real",4,0,0,1},
 {"control_point_1_y","float","real",4,0,0,1},
 {"control_point_2_x","float","real",4,0,0,1},
@@ -52,9 +52,9 @@ Curvelink::Curvelink(const Row &r, const ssize_t indexOffset) noexcept
         {
             idStart_=std::make_shared<int32_t>(r["id_start"].as<int32_t>());
         }
-        if(!r["id_stop"].isNull())
+        if(!r["id_end"].isNull())
         {
-            idStop_=std::make_shared<int32_t>(r["id_stop"].as<int32_t>());
+            idEnd_=std::make_shared<int32_t>(r["id_end"].as<int32_t>());
         }
         if(!r["control_point_1_x"].isNull())
         {
@@ -99,7 +99,7 @@ Curvelink::Curvelink(const Row &r, const ssize_t indexOffset) noexcept
         index = offset + 2;
         if(!r[index].isNull())
         {
-            idStop_=std::make_shared<int32_t>(r[index].as<int32_t>());
+            idEnd_=std::make_shared<int32_t>(r[index].as<int32_t>());
         }
         index = offset + 3;
         if(!r[index].isNull())
@@ -158,7 +158,7 @@ Curvelink::Curvelink(const Json::Value &pJson, const std::vector<std::string> &p
         dirtyFlag_[2] = true;
         if(!pJson[pMasqueradingVector[2]].isNull())
         {
-            idStop_=std::make_shared<int32_t>((int32_t)pJson[pMasqueradingVector[2]].asInt64());
+            idEnd_=std::make_shared<int32_t>((int32_t)pJson[pMasqueradingVector[2]].asInt64());
         }
     }
     if(!pMasqueradingVector[3].empty() && pJson.isMember(pMasqueradingVector[3]))
@@ -221,12 +221,12 @@ Curvelink::Curvelink(const Json::Value &pJson) noexcept(false)
             idStart_=std::make_shared<int32_t>((int32_t)pJson["id_start"].asInt64());
         }
     }
-    if(pJson.isMember("id_stop"))
+    if(pJson.isMember("id_end"))
     {
         dirtyFlag_[2]=true;
-        if(!pJson["id_stop"].isNull())
+        if(!pJson["id_end"].isNull())
         {
-            idStop_=std::make_shared<int32_t>((int32_t)pJson["id_stop"].asInt64());
+            idEnd_=std::make_shared<int32_t>((int32_t)pJson["id_end"].asInt64());
         }
     }
     if(pJson.isMember("control_point_1_x"))
@@ -299,7 +299,7 @@ void Curvelink::updateByMasqueradedJson(const Json::Value &pJson,
         dirtyFlag_[2] = true;
         if(!pJson[pMasqueradingVector[2]].isNull())
         {
-            idStop_=std::make_shared<int32_t>((int32_t)pJson[pMasqueradingVector[2]].asInt64());
+            idEnd_=std::make_shared<int32_t>((int32_t)pJson[pMasqueradingVector[2]].asInt64());
         }
     }
     if(!pMasqueradingVector[3].empty() && pJson.isMember(pMasqueradingVector[3]))
@@ -361,12 +361,12 @@ void Curvelink::updateByJson(const Json::Value &pJson) noexcept(false)
             idStart_=std::make_shared<int32_t>((int32_t)pJson["id_start"].asInt64());
         }
     }
-    if(pJson.isMember("id_stop"))
+    if(pJson.isMember("id_end"))
     {
         dirtyFlag_[2] = true;
-        if(!pJson["id_stop"].isNull())
+        if(!pJson["id_end"].isNull())
         {
-            idStop_=std::make_shared<int32_t>((int32_t)pJson["id_stop"].asInt64());
+            idEnd_=std::make_shared<int32_t>((int32_t)pJson["id_end"].asInt64());
         }
     }
     if(pJson.isMember("control_point_1_x"))
@@ -450,20 +450,20 @@ void Curvelink::setIdStart(const int32_t &pIdStart) noexcept
     dirtyFlag_[1] = true;
 }
 
-const int32_t &Curvelink::getValueOfIdStop() const noexcept
+const int32_t &Curvelink::getValueOfIdEnd() const noexcept
 {
     static const int32_t defaultValue = int32_t();
-    if(idStop_)
-        return *idStop_;
+    if(idEnd_)
+        return *idEnd_;
     return defaultValue;
 }
-const std::shared_ptr<int32_t> &Curvelink::getIdStop() const noexcept
+const std::shared_ptr<int32_t> &Curvelink::getIdEnd() const noexcept
 {
-    return idStop_;
+    return idEnd_;
 }
-void Curvelink::setIdStop(const int32_t &pIdStop) noexcept
+void Curvelink::setIdEnd(const int32_t &pIdEnd) noexcept
 {
-    idStop_ = std::make_shared<int32_t>(pIdStop);
+    idEnd_ = std::make_shared<int32_t>(pIdEnd);
     dirtyFlag_[2] = true;
 }
 
@@ -560,7 +560,7 @@ const std::vector<std::string> &Curvelink::insertColumns() noexcept
 {
     static const std::vector<std::string> inCols={
         "id_start",
-        "id_stop",
+        "id_end",
         "control_point_1_x",
         "control_point_1_y",
         "control_point_2_x",
@@ -585,9 +585,9 @@ void Curvelink::outputArgs(drogon::orm::internal::SqlBinder &binder) const
     }
     if(dirtyFlag_[2])
     {
-        if(getIdStop())
+        if(getIdEnd())
         {
-            binder << getValueOfIdStop();
+            binder << getValueOfIdEnd();
         }
         else
         {
@@ -700,9 +700,9 @@ void Curvelink::updateArgs(drogon::orm::internal::SqlBinder &binder) const
     }
     if(dirtyFlag_[2])
     {
-        if(getIdStop())
+        if(getIdEnd())
         {
-            binder << getValueOfIdStop();
+            binder << getValueOfIdEnd();
         }
         else
         {
@@ -784,13 +784,13 @@ Json::Value Curvelink::toJson() const
     {
         ret["id_start"]=Json::Value();
     }
-    if(getIdStop())
+    if(getIdEnd())
     {
-        ret["id_stop"]=getValueOfIdStop();
+        ret["id_end"]=getValueOfIdEnd();
     }
     else
     {
-        ret["id_stop"]=Json::Value();
+        ret["id_end"]=Json::Value();
     }
     if(getControlPoint1X())
     {
@@ -865,9 +865,9 @@ Json::Value Curvelink::toMasqueradedJson(
         }
         if(!pMasqueradingVector[2].empty())
         {
-            if(getIdStop())
+            if(getIdEnd())
             {
-                ret[pMasqueradingVector[2]]=getValueOfIdStop();
+                ret[pMasqueradingVector[2]]=getValueOfIdEnd();
             }
             else
             {
@@ -948,13 +948,13 @@ Json::Value Curvelink::toMasqueradedJson(
     {
         ret["id_start"]=Json::Value();
     }
-    if(getIdStop())
+    if(getIdEnd())
     {
-        ret["id_stop"]=getValueOfIdStop();
+        ret["id_end"]=getValueOfIdEnd();
     }
     else
     {
-        ret["id_stop"]=Json::Value();
+        ret["id_end"]=Json::Value();
     }
     if(getControlPoint1X())
     {
@@ -1016,14 +1016,14 @@ bool Curvelink::validateJsonForCreation(const Json::Value &pJson, std::string &e
         err="The id_start column cannot be null";
         return false;
     }
-    if(pJson.isMember("id_stop"))
+    if(pJson.isMember("id_end"))
     {
-        if(!validJsonOfField(2, "id_stop", pJson["id_stop"], err, true))
+        if(!validJsonOfField(2, "id_end", pJson["id_end"], err, true))
             return false;
     }
     else
     {
-        err="The id_stop column cannot be null";
+        err="The id_end column cannot be null";
         return false;
     }
     if(pJson.isMember("control_point_1_x"))
@@ -1212,9 +1212,9 @@ bool Curvelink::validateJsonForUpdate(const Json::Value &pJson, std::string &err
         if(!validJsonOfField(1, "id_start", pJson["id_start"], err, false))
             return false;
     }
-    if(pJson.isMember("id_stop"))
+    if(pJson.isMember("id_end"))
     {
-        if(!validJsonOfField(2, "id_stop", pJson["id_stop"], err, false))
+        if(!validJsonOfField(2, "id_end", pJson["id_end"], err, false))
             return false;
     }
     if(pJson.isMember("control_point_1_x"))
