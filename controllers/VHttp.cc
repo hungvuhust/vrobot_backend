@@ -2,72 +2,107 @@
 
 std::shared_ptr<VMapManager> VHttp::carto_cli_ = nullptr;
 
-void VHttp::idle(const HttpRequestPtr                          &req,
-                 std::function<void(const HttpResponsePtr &)> &&callback) {
+void VHttp::idle(const HttpRequestPtr &req,
+                 std::function<void(const HttpResponsePtr &)> &&callback)
+{
   auto result = carto_cli_->switch_idle();
-  auto resp   = HttpResponse::newHttpResponse();
-  if (result) {
+  auto resp = HttpResponse::newHttpResponse();
+  if (result)
+  {
     resp->setStatusCode(k200OK);
     resp->setBody("Idle mode activated successfully.");
-  } else {
+  }
+  else
+  {
     resp->setStatusCode(k500InternalServerError);
     resp->setBody("Failed to activate idle mode.");
   }
   callback(resp);
 }
 
-void VHttp::mapping(const HttpRequestPtr                          &req,
-                    std::function<void(const HttpResponsePtr &)> &&callback) {
+void VHttp::mapping(const HttpRequestPtr &req,
+                    std::function<void(const HttpResponsePtr &)> &&callback)
+{
 
   auto result = carto_cli_->start_mapping();
-  auto resp   = HttpResponse::newHttpResponse();
-  if (result) {
+  auto resp = HttpResponse::newHttpResponse();
+  if (result)
+  {
     resp->setStatusCode(k200OK);
     resp->setBody("Mapping started successfully.");
-  } else {
+  }
+  else
+  {
     resp->setStatusCode(k500InternalServerError);
     resp->setBody("Failed to start mapping.");
   }
   callback(resp);
 }
 
-void VHttp::save_map(const HttpRequestPtr                          &req,
+void VHttp::save_map(const HttpRequestPtr &req,
                      std::function<void(const HttpResponsePtr &)> &&callback,
-                     std::string                                  &&map_name) {
-  auto result = carto_cli_->save_map(map_name);
-  auto resp   = HttpResponse::newHttpResponse();
-  if (result) {
+                     std::string &&map_name)
+{
+  std::string map_dir = maps_dir_ + map_name + ".pbstream";
+  auto result = carto_cli_->save_map(map_dir);
+  auto resp = HttpResponse::newHttpResponse();
+  if (result)
+  {
     resp->setStatusCode(k200OK);
     resp->setBody("Map saved successfully.");
-  } else {
+  }
+  else
+  {
     resp->setStatusCode(k500InternalServerError);
     resp->setBody("Failed to save map.");
   }
   callback(resp);
 }
 
-void VHttp::open_map(const HttpRequestPtr                          &req,
+void VHttp::open_map(const HttpRequestPtr &req,
                      std::function<void(const HttpResponsePtr &)> &&callback,
-                     std::string                                  &&map_name) {
-  auto result = carto_cli_->switch_localization(map_name);
-  auto resp   = HttpResponse::newHttpResponse();
-  if (result) {
+                     std::string &&map_name)
+{
+  std::string map_dir = maps_dir_ + map_name + ".pbstream";
+  auto result = carto_cli_->switch_localization(map_dir);
+
+  auto resp = HttpResponse::newHttpResponse();
+  if (result)
+  {
+    auto map = carto_cli_->getMapFromDir(map_dir);
+
+    if (map.empty())
+    {
+      resp->setStatusCode(k500InternalServerError);
+      resp->setBody("Failed to get map.");
+      callback(resp);
+      return;
+    }
+
+    // Convert the map to a PNG image
+    std::vector<uchar> buf;
+    cv::imencode(".png", map, buf);
+    std::string str(buf.begin(), buf.end());
+    resp->setContentTypeCode(drogon::CT_IMAGE_PNG);
+    resp->setBody(str);
     resp->setStatusCode(k200OK);
-    resp->setBody("Map opened successfully.");
-  } else {
+  }
+  else
+  {
     resp->setStatusCode(k500InternalServerError);
-    resp->setBody("Failed to open map.");
   }
   callback(resp);
 }
 
-void VHttp::get_map(const HttpRequestPtr                          &req,
-                    std::function<void(const HttpResponsePtr &)> &&callback) {
+void VHttp::get_map(const HttpRequestPtr &req,
+                    std::function<void(const HttpResponsePtr &)> &&callback)
+{
 
-  cv::Mat map  = carto_cli_->get_current_map();
-  auto    resp = HttpResponse::newHttpResponse();
+  cv::Mat map = carto_cli_->get_current_map();
+  auto resp = HttpResponse::newHttpResponse();
 
-  if (map.empty()) {
+  if (map.empty())
+  {
     resp->setStatusCode(k500InternalServerError);
     resp->setBody("Failed to get map.");
     callback(resp);
@@ -86,15 +121,19 @@ void VHttp::get_map(const HttpRequestPtr                          &req,
 }
 
 void VHttp::set_initial_pose(
-    const HttpRequestPtr                          &req,
+    const HttpRequestPtr &req,
     std::function<void(const HttpResponsePtr &)> &&callback, double x, double y,
-    double theta) {
+    double theta)
+{
   auto result = carto_cli_->initial_pose(x, y, theta);
-  auto resp   = HttpResponse::newHttpResponse();
-  if (result) {
+  auto resp = HttpResponse::newHttpResponse();
+  if (result)
+  {
     resp->setStatusCode(k200OK);
     resp->setBody("Initial pose set successfully.");
-  } else {
+  }
+  else
+  {
     resp->setStatusCode(k500InternalServerError);
     resp->setBody("Failed to set initial pose.");
   }

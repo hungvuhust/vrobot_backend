@@ -36,7 +36,9 @@ using DbClientPtr = std::shared_ptr<DbClient>;
 }
 namespace drogon_model
 {
-namespace vrobot
+namespace amr_01
+{
+namespace amr_ros2
 {
 
 class Curvelink
@@ -46,7 +48,7 @@ class Curvelink
     {
         static const std::string _id_curve_link;
         static const std::string _id_start;
-        static const std::string _id_stop;
+        static const std::string _id_end;
         static const std::string _control_point_1_x;
         static const std::string _control_point_1_y;
         static const std::string _control_point_2_x;
@@ -119,13 +121,13 @@ class Curvelink
     ///Set the value of the column id_start
     void setIdStart(const int32_t &pIdStart) noexcept;
 
-    /**  For column id_stop  */
-    ///Get the value of the column id_stop, returns the default value if the column is null
-    const int32_t &getValueOfIdStop() const noexcept;
+    /**  For column id_end  */
+    ///Get the value of the column id_end, returns the default value if the column is null
+    const int32_t &getValueOfIdEnd() const noexcept;
     ///Return a shared_ptr object pointing to the column const value, or an empty shared_ptr object if the column is null
-    const std::shared_ptr<int32_t> &getIdStop() const noexcept;
-    ///Set the value of the column id_stop
-    void setIdStop(const int32_t &pIdStop) noexcept;
+    const std::shared_ptr<int32_t> &getIdEnd() const noexcept;
+    ///Set the value of the column id_end
+    void setIdEnd(const int32_t &pIdEnd) noexcept;
 
     /**  For column control_point_1_x  */
     ///Get the value of the column control_point_1_x, returns the default value if the column is null
@@ -191,7 +193,7 @@ class Curvelink
     void updateId(const uint64_t id);
     std::shared_ptr<int32_t> idCurveLink_;
     std::shared_ptr<int32_t> idStart_;
-    std::shared_ptr<int32_t> idStop_;
+    std::shared_ptr<int32_t> idEnd_;
     std::shared_ptr<float> controlPoint1X_;
     std::shared_ptr<float> controlPoint1Y_;
     std::shared_ptr<float> controlPoint2X_;
@@ -235,7 +237,7 @@ class Curvelink
         }
         if(dirtyFlag_[2])
         {
-            sql += "id_stop,";
+            sql += "id_end,";
             ++parametersCount;
         }
         if(dirtyFlag_[3])
@@ -327,5 +329,6 @@ class Curvelink
         return sql;
     }
 };
-} // namespace vrobot
+} // namespace amr_ros2
+} // namespace amr_01
 } // namespace drogon_model

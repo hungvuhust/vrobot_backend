@@ -5,9 +5,10 @@
 #include <models/Curvelink.h>
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
+using namespace drogon_model::amr_01::amr_ros2;
 
-class CurvelinkService : public drogon::HttpController<CurvelinkService> {
+class CurvelinkService : public drogon::HttpController<CurvelinkService>
+{
 public:
   METHOD_LIST_BEGIN
   // GET    /curvelinks
@@ -22,15 +23,15 @@ public:
   ADD_METHOD_TO(CurvelinkService::erase, "/curvelinks/{1}", Delete);
   METHOD_LIST_END
 
-  void getAll(const HttpRequestPtr                          &req,
+  void getAll(const HttpRequestPtr &req,
               std::function<void(const HttpResponsePtr &)> &&callback);
-  void getById(const HttpRequestPtr                          &req,
+  void getById(const HttpRequestPtr &req,
                std::function<void(const HttpResponsePtr &)> &&callback, int id);
-  void create(const HttpRequestPtr                          &req,
+  void create(const HttpRequestPtr &req,
               std::function<void(const HttpResponsePtr &)> &&callback);
-  void update(const HttpRequestPtr                          &req,
+  void update(const HttpRequestPtr &req,
               std::function<void(const HttpResponsePtr &)> &&callback, int id);
-  void erase(const HttpRequestPtr                          &req,
+  void erase(const HttpRequestPtr &req,
              std::function<void(const HttpResponsePtr &)> &&callback, int id);
 
 private:

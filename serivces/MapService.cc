@@ -1,11 +1,10 @@
 #include "serivces/MapService.h"
 #include <drogon/drogon.h>
 #include <models/Map.h>
-using namespace drogon_model::vrobot;
+
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::vrobot;
 
 void MapService::getAll(
     const HttpRequestPtr                          &req,
@@ -68,6 +67,10 @@ void MapService::create(
   m.setY((*json)["y"].asFloat());
   m.setTheta((*json)["theta"].asFloat());
   m.setImage((*json)["image"].asString());
+  m.setWidth((*json)["width"].asInt());
+  m.setHeight((*json)["height"].asInt());
+  m.setResolution((*json)["resolution"].asFloat());
+
 
   mapMapper_.insert(
       m,
@@ -109,6 +112,12 @@ void MapService::update(const HttpRequestPtr                          &req,
           updatedMap.setTheta((*json)["theta"].asFloat());
         if ((*json).isMember("image"))
           updatedMap.setImage((*json)["image"].asString());
+        if ((*json).isMember("width"))
+          updatedMap.setWidth((*json)["width"].asInt());
+        if ((*json).isMember("height"))
+          updatedMap.setHeight((*json)["height"].asInt());
+        if ((*json).isMember("resolution"))
+          updatedMap.setResolution((*json)["resolution"].asFloat());
         drogon::orm::Mapper<Map> updateMapper(app().getDbClient("default"));
         updateMapper.update(
             updatedMap,

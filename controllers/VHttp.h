@@ -6,7 +6,8 @@
 using namespace drogon;
 using namespace vrobot_backend;
 
-class VHttp : public drogon::HttpController<VHttp> {
+class VHttp : public drogon::HttpController<VHttp>
+{
 public:
   METHOD_LIST_BEGIN
   ADD_METHOD_TO(VHttp::mapping, "/mapping", Post);
@@ -18,31 +19,33 @@ public:
   ADD_METHOD_TO(VHttp::get_map, "/get-map", Get);
   METHOD_LIST_END
 
-  static void Initialize(rclcpp::Node::SharedPtr ros) {
+  static void Initialize(rclcpp::Node::SharedPtr ros)
+  {
     carto_cli_ = std::make_shared<VMapManager>(ros);
   }
 
-  void idle(const HttpRequestPtr                          &req,
+  void idle(const HttpRequestPtr &req,
             std::function<void(const HttpResponsePtr &)> &&callback);
 
-  void mapping(const HttpRequestPtr                          &req,
+  void mapping(const HttpRequestPtr &req,
                std::function<void(const HttpResponsePtr &)> &&callback);
 
-  void save_map(const HttpRequestPtr                          &req,
+  void save_map(const HttpRequestPtr &req,
                 std::function<void(const HttpResponsePtr &)> &&callback,
-                std::string                                  &&map_name);
+                std::string &&map_name);
 
-  void open_map(const HttpRequestPtr                          &req,
+  void open_map(const HttpRequestPtr &req,
                 std::function<void(const HttpResponsePtr &)> &&callback,
-                std::string                                  &&map_name);
+                std::string &&map_name);
 
-  void get_map(const HttpRequestPtr                          &req,
+  void get_map(const HttpRequestPtr &req,
                std::function<void(const HttpResponsePtr &)> &&callback);
 
-  void set_initial_pose(const HttpRequestPtr                          &req,
+  void set_initial_pose(const HttpRequestPtr &req,
                         std::function<void(const HttpResponsePtr &)> &&callback,
                         double x, double y, double theta);
 
 private:
   static std::shared_ptr<VMapManager> carto_cli_;
+  std::string maps_dir_{"/home/boot/ros2_ws/map/"};
 };

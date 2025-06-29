@@ -11,7 +11,6 @@ set(THIS_PACKAGE_DEPENDENCIES
   rclcpp
   rclcpp_components
   geometry_msgs
-  rtcrobot_interfaces
   sensor_msgs
   tf2
   tf2_ros
@@ -70,5 +69,16 @@ add_executable(${PROJECT_NAME}_node
 target_link_libraries(${PROJECT_NAME}_node
         ${PROJECT_NAME}_lib
 )
+
+install(TARGETS ${PROJECT_NAME}_lib 
+     LIBRARY   DESTINATION lib
+)
+
+install(TARGETS ${PROJECT_NAME}_node
+        DESTINATION lib/${PROJECT_NAME}
+)
+
+
+
 
 ament_package()
